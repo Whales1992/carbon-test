@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.whales.fairmoneytest.dao.UserDao
 import com.whales.fairmoneytest.models.room.User
 
-@Database(entities = [User::class], version = 1)
+@Database(entities = [User::class], version = 1, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 }
