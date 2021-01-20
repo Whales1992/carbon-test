@@ -1,16 +1,15 @@
 package com.whales.fairmoneytest
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.whales.fairmoneytest.adapter.UserObjectActions
@@ -18,14 +17,10 @@ import com.whales.fairmoneytest.adapter.UsersListAdapter
 import com.whales.fairmoneytest.databinding.ActivityMainBinding
 import com.whales.fairmoneytest.models.room.User
 import com.whales.fairmoneytest.networks.rectrofit.ApiCalls
-import com.whales.fairmoneytest.networks.rectrofit.pojo.UsersResponseObject
 import com.whales.fairmoneytest.repository.DataBase
 import com.whales.fairmoneytest.viewmodel.UserViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import androidx.lifecycle.viewModelScope
 import com.squareup.picasso.Picasso
+import com.whales.fairmoneytest.view.UserDetailsActivity
 
 class MainActivity : AppCompatActivity(), UserObjectActions {
     private lateinit var binding: ActivityMainBinding
@@ -70,5 +65,13 @@ class MainActivity : AppCompatActivity(), UserObjectActions {
             .resize(50, 50)
             .centerCrop()
             .into(dpView)
+
+        parentCardView!!.setOnClickListener{
+            val intent = Intent(this, UserDetailsActivity::class.java).apply {
+                putExtra("user", user.uid)
+            }
+
+            startActivity(intent)
+        }
     }
 }

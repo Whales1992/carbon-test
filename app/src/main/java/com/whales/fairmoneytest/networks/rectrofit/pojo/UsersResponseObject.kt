@@ -1,5 +1,6 @@
 package com.whales.fairmoneytest.networks.rectrofit.pojo
 
+import androidx.room.Database
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -23,6 +24,10 @@ class UsersResponseObject {
             fun arrayDataBeanFromData(src: String?):List<DataBean>{
                 val listType = object : TypeToken<ArrayList<DataBean?>?>() {}.type
                 return Gson().fromJson(src, listType)
+            }
+
+            fun toStringObject(src:DataBean):String{
+                return Gson().toJson(src, DataBean::class.java)
             }
 
         }

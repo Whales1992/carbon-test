@@ -4,6 +4,7 @@ plugins {
 }
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     compileSdkVersion 29
@@ -133,6 +134,17 @@ dependencies {
     dependencies {
         implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
     }
+
+    //NAVIGATION
+//    dependencies {
+//        def nav_version = "2.3.2"
+//
+//        implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+//        implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+//
+//        // Jetpack Compose Integration
+//        implementation "androidx.navigation:navigation-compose:1.0.0-alpha05"
+//    }
 
 
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.whales.fairmoneytest.models.room.User
 import com.whales.fairmoneytest.networks.rectrofit.ApiCalls
 import com.whales.fairmoneytest.networks.rectrofit.IResponse
+import com.whales.fairmoneytest.networks.rectrofit.pojo.UserObject
 import com.whales.fairmoneytest.networks.rectrofit.pojo.UsersResponseObject
 import com.whales.fairmoneytest.repository.DataBase
 import com.whales.fairmoneytest.repository.Repository
@@ -35,6 +36,25 @@ class UserViewModel : ViewModel() {
         return responseMutableLiveData
     }
 
+    fun getUserDetails(
+        apiCalls: ApiCalls,
+        uid: String
+    ): LiveData<ResponseObjectMapper?> {
+        try {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO) {
+                    Thread(getUserDetail(apiCalls,uid, responseMutableLiveData)).start()
+                }
+            }
+        } catch (ex: IllegalThreadStateException) {
+            ex.printStackTrace()
+        }
+
+        return responseMutableLiveData
+    }
+
+
+
     class Next50UsersRequest(private val apiCalls: ApiCalls, var responseMutableLiveData: MutableLiveData<ResponseObjectMapper>): Runnable
     {
         override fun run(){
@@ -45,6 +65,25 @@ class UserViewModel : ViewModel() {
                         DataBase().addUser(User(user.id!!, user.lastName,user.firstName, user.email, user.title, user.picture))
                     }
 
+                    responseMutableLiveData.postValue(ResponseObjectMapper (true, res))
+                }
+
+                override fun onFailure(res: String) {
+                    responseMutableLiveData.postValue(ResponseObjectMapper (false, res))
+                }
+
+                override fun onNetworkError(res: String) {
+                    responseMutableLiveData.postValue(ResponseObjectMapper (false, res))
+                }
+            });
+        }
+    }
+
+    class getUserDetail(private val apiCalls: ApiCalls, private val uid: String, var responseMutableLiveData: MutableLiveData<ResponseObjectMapper>): Runnable
+    {
+        override fun run(){
+            Repository.getSingleton()!!.getUserDetails(apiCalls, uid, object : IResponse<UserObject> {
+                override fun onSuccess(res: UserObject) {
                     responseMutableLiveData.postValue(ResponseObjectMapper (true, res))
                 }
 
