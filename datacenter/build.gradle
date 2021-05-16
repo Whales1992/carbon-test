@@ -54,8 +54,26 @@ dependencies {
         testImplementation "androidx.room:room-testing:$room_version"
     }
 
-    //PARENT MODULE
+//PARENT MODULE
+//    dependencies {
+//        implementation project(':app')
+//    }
+
+    //DAGGER
     dependencies {
-        implementation project(':app')
+        def dagger_version = "2.35.1"
+
+        // Dagger2 core
+        implementation "com.google.dagger:dagger:$dagger_version"
+        annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+
+        // Dagger Android
+        implementation "com.google.dagger:dagger-android:$dagger_version"
+        implementation "com.google.dagger:dagger-android-support:$dagger_version"
+        annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
+
+        kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+        kapt "com.google.dagger:dagger-compiler:$dagger_version"
     }
+
 }

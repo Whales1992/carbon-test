@@ -2,26 +2,24 @@ package com.whales.carbontest.networks.rectrofit
 
 import android.util.Log
 import com.whales.carbontest.constant.genericNetworkErrorMsg
-import com.whales.carbontest.networks.rectrofit.dto.UsersResponseObject
+import com.whales.carbontest.networks.rectrofit.dto.MovieDTO
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import javax.inject.Inject
+import javax.inject.Named
 
-class ApiCalls {
-
-    @Inject
-    lateinit var retrofit: Retrofit
+class ApiCalls @Inject constructor(@Named("token") private val token: Map<String, String>, retrofit: Retrofit) {
 
     private var iApi: IApi = retrofit.create(IApi::class.java)
 
-    fun getTrendingMovies(iResponse: IResponse<UsersResponseObject>)
+    fun getTrendingMovies(iResponse: IResponse<MovieDTO>)
     {
         try {
-            val call: Call<UsersResponseObject> = iApi.getTrendingMovies()
-            call.enqueue(object : Callback<UsersResponseObject> {
-                override fun onResponse(call: Call<UsersResponseObject>, response: Response<UsersResponseObject>) {
+            val call: Call<MovieDTO> = iApi.getTrendingMovies(token)
+            call.enqueue(object : Callback<MovieDTO> {
+                override fun onResponse(call: Call<MovieDTO>, response: Response<MovieDTO>) {
                     when {
                         response.isSuccessful -> {
                             if (response.body() != null) {
@@ -37,7 +35,7 @@ class ApiCalls {
                     }
                 }
 
-                override fun onFailure(call: Call<UsersResponseObject>, t: Throwable) {
+                override fun onFailure(call: Call<MovieDTO>, t: Throwable) {
                     Log.e("@onFailure", t.toString());
 
                     if (t.message != null)

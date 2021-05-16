@@ -2,22 +2,12 @@ package com.whales.carbontest.repository
 
 import com.whales.carbontest.networks.rectrofit.ApiCalls
 import com.whales.carbontest.networks.rectrofit.IResponse
-import com.whales.carbontest.networks.rectrofit.dto.UserObject
-import com.whales.carbontest.networks.rectrofit.dto.UsersResponseObject
-import retrofit2.Retrofit
+import com.whales.carbontest.networks.rectrofit.dto.MovieDTO
 
-class MovieRepository {
+class MovieRepository(private val apiCalls: ApiCalls) {
 
-    companion object{
-        private var singleton: MovieRepository? = null
-
-        fun getSingleton(): MovieRepository? {
-            if (singleton == null) singleton = MovieRepository()
-            return singleton
+        fun getTrendingMovies(iResponse: IResponse<MovieDTO>) {
+            apiCalls.getTrendingMovies(iResponse)
         }
 
-        fun getTrendingMovies(iResponse: IResponse<UsersResponseObject>) {
-            ApiCalls().getTrendingMovies(iResponse)
-        }
-    }
 }

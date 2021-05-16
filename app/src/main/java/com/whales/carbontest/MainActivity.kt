@@ -3,8 +3,9 @@ package com.whales.carbontest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.whales.carbontest.databinding.ActivityMainBinding
+import dagger.android.support.DaggerAppCompatActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
 
 //        val viewModel: UserViewModel by viewModels()
 //        viewModel.getAllUsers(ApiCalls()).observe(this,

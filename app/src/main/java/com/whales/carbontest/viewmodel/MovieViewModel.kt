@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.whales.carbontest.networks.rectrofit.ApiCalls
 import com.whales.carbontest.networks.rectrofit.IResponse
+import com.whales.carbontest.networks.rectrofit.dto.MovieDTO
 import com.whales.carbontest.networks.rectrofit.dto.UsersResponseObject
 import com.whales.carbontest.repository.MovieRepository
 import com.whales.carbontest.repository.ResponseObjectMapper
@@ -15,11 +17,11 @@ import kotlinx.coroutines.withContext
 class MovieViewModel : ViewModel() {
     private val responseMutableLiveData: MutableLiveData<ResponseObjectMapper> = MutableLiveData()
 
-    fun getTrendingMovies(): LiveData<ResponseObjectMapper?> {
+    fun getTrendingMovies(apiCalls: ApiCalls): LiveData<ResponseObjectMapper?> {
         try {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    Thread(GetTrendingMovies(responseMutableLiveData)).start()
+                    Thread(GetTrendingMovies(apiCalls, responseMutableLiveData)).start()
                 }
             }
         } catch (ex: IllegalThreadStateException) {
@@ -29,11 +31,11 @@ class MovieViewModel : ViewModel() {
         return responseMutableLiveData
     }
 
-    class GetTrendingMovies(private val responseMutableLiveData: MutableLiveData<ResponseObjectMapper>): Runnable
+    class GetTrendingMovies(private val apiCalls: ApiCalls, private val responseMutableLiveData: MutableLiveData<ResponseObjectMapper>): Runnable
     {
         override fun run(){
-            MovieRepository.getTrendingMovies(object : IResponse<UsersResponseObject> {
-                override fun onSuccess(res: UsersResponseObject) {
+            MovieRepository(apiCalls).getTrendingMovies(object : IResponse<MovieDTO> {
+                override fun onSuccess(res: MovieDTO) {
                     responseMutableLiveData.postValue(ResponseObjectMapper (true, res))
                 }
 
