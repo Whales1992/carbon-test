@@ -17,11 +17,11 @@ import kotlinx.coroutines.withContext
 class MovieViewModel : ViewModel() {
     private val responseMutableLiveData: MutableLiveData<ResponseObjectMapper> = MutableLiveData()
 
-    fun getTrendingMovies(apiCalls: ApiCalls): LiveData<ResponseObjectMapper?> {
+    fun getTrendingMovies(param : Map<String, String>, apiCalls: ApiCalls): LiveData<ResponseObjectMapper?> {
         try {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    Thread(GetTrendingMovies(apiCalls, responseMutableLiveData)).start()
+                    Thread(GetTrendingMovies(param, apiCalls, responseMutableLiveData)).start()
                 }
             }
         } catch (ex: IllegalThreadStateException) {
@@ -31,10 +31,10 @@ class MovieViewModel : ViewModel() {
         return responseMutableLiveData
     }
 
-    class GetTrendingMovies(private val apiCalls: ApiCalls, private val responseMutableLiveData: MutableLiveData<ResponseObjectMapper>): Runnable
+    class GetTrendingMovies(private val param : Map<String, String>, private val apiCalls: ApiCalls, private val responseMutableLiveData: MutableLiveData<ResponseObjectMapper>): Runnable
     {
         override fun run(){
-            MovieRepository(apiCalls).getTrendingMovies(object : IResponse<MovieDTO> {
+            MovieRepository(apiCalls).getTrendingMovies(param, object : IResponse<MovieDTO> {
                 override fun onSuccess(res: MovieDTO) {
                     responseMutableLiveData.postValue(ResponseObjectMapper (true, res))
                 }

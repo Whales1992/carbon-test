@@ -28,7 +28,7 @@ class MovieDetailsActivity : DaggerAppCompatActivity() {
         val extras = intent.getStringExtra("meta")!!.replace("{", "").replace("}", "")
         val meta = extras.split(",").associate {
             val (left, right) = it.split("=")
-            left to right
+            left.trim() to right
         }
 
         binding.backBtn.setOnClickListener{finish()}

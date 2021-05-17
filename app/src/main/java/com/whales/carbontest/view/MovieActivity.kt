@@ -2,6 +2,7 @@ package com.whales.carbontest.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -22,6 +23,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
+import com.whales.carbontest.constant.ApiToken
 
 class MovieActivity : DaggerAppCompatActivity(), MovieActions{
     private lateinit var binding: ActivityMovieBinding
@@ -38,18 +40,16 @@ class MovieActivity : DaggerAppCompatActivity(), MovieActions{
     @Named("imageBaseUrl200")
     lateinit var imageBaseUrl200: String
 
-    @Inject
-    @Named("token")
-    lateinit var token: Map<String, String>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMovieBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
+        val param = mapOf("api_key" to ApiToken)
+
         movieViewModel = ViewModelProvider(this, ViewModelFactory()).get(MovieViewModel::class.java)
-        movieViewModel.getTrendingMovies(ApiCalls(token, provideNetworkClient)).observe(this, { t ->
+        movieViewModel.getTrendingMovies(param, ApiCalls(provideNetworkClient)).observe(this, { t ->
             if(t!=null && t.isSuccess()){
                 runOnUiThread {
                     updateView(t.responseObject() as MovieDTO);
@@ -67,10 +67,12 @@ class MovieActivity : DaggerAppCompatActivity(), MovieActions{
         ImageBindingAdapter(picasso, "${imageBaseUrl200}${movie.poster_path}").loadImageUrl(dpView)
         movieNameTextView.text = movie.title
 
-        val meta = mapOf("id" to movie.id.toString(), "title" to movie.title, "poster" to movie.poster_path)
+        val meta = mapOf("id" to movie.id.toString(), "title" to movie.title, "poster" to movie.poster_path).toString()
         parentCardView.setOnClickListener {
+            Log.e("HELP", meta);
+
             val intent = Intent(this, MovieDetailsActivity::class.java)
-            intent.putExtra("meta", meta.toString())
+            intent.putExtra("meta", meta)
             startActivity(intent)
         }
     }
