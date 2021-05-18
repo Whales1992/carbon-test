@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/parentLayout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -52,6 +53,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/dpCardView"
         app:layout_constraintTop_toBottomOf="@+id/toolBar"
         app:cardElevation="1dp"
         android:layout_width="match_parent"
@@ -64,5 +66,31 @@
             android:layout_height="match_parent"/>
 
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/overViewTitle"
+        app:layout_constraintTop_toBottomOf="@+id/dpCardView"
+        android:text="OverView"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/overView"
+        app:layout_constraintTop_toBottomOf="@+id/overViewTitle"
+        android:text="About"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:id="@+id/detailsView"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/overView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

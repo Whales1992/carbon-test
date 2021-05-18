@@ -6,25 +6,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.whales.carbontest.networks.rectrofit.ApiCalls
 import com.whales.carbontest.networks.rectrofit.IResponse
-import com.whales.carbontest.networks.rectrofit.dto.MovieDTO
-import com.whales.carbontest.networks.rectrofit.dto.UsersResponseObject
+import com.whales.carbontest.networks.rectrofit.dto.MovieDetailsDTO
 import com.whales.carbontest.repository.MovieRepository
 import com.whales.carbontest.repository.ResponseObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-class MovieViewModel : ViewModel()
+class MovieDetailsViewModel : ViewModel()
 {
     private val responseMutableLiveData: MutableLiveData<ResponseObjectMapper> = MutableLiveData()
 
-    fun getTrendingMovies(apiCalls: ApiCalls): LiveData<ResponseObjectMapper?>
+    fun getMovieDetails(param : String, apiCalls: ApiCalls): LiveData<ResponseObjectMapper?>
     {
         try {
             viewModelScope.launch {
                 withContext(Dispatchers.IO) {
-                    Thread(GetTrendingMovies(apiCalls, responseMutableLiveData)).start()
+                    Thread(GetMovieDetails(param, apiCalls, responseMutableLiveData)).start()
                 }
             }
         } catch (ex: IllegalThreadStateException) {
@@ -34,11 +32,11 @@ class MovieViewModel : ViewModel()
         return responseMutableLiveData
     }
 
-    class GetTrendingMovies(private val apiCalls: ApiCalls, private val responseMutableLiveData: MutableLiveData<ResponseObjectMapper>): Runnable
+    class GetMovieDetails(private val param : String, private val apiCalls: ApiCalls, private val responseMutableLiveData: MutableLiveData<ResponseObjectMapper>): Runnable
     {
         override fun run(){
-            MovieRepository(apiCalls).getTrendingMovies(object : IResponse<MovieDTO> {
-                override fun onSuccess(res: MovieDTO) {
+            MovieRepository(apiCalls).getMovieDetails(param, object : IResponse<MovieDetailsDTO> {
+                override fun onSuccess(res: MovieDetailsDTO) {
                     responseMutableLiveData.postValue(ResponseObjectMapper (true, res))
                 }
 
