@@ -4,6 +4,7 @@ import android.app.Application
 import com.android.datacenter.di.DataCenterComponent
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
+import com.whales.carbontest.constant.ApiToken
 import com.whales.carbontest.constant.ImageBaseUrl
 import com.whales.carbontest.constant.RequestBaseUrl
 import dagger.Module
@@ -18,6 +19,13 @@ import javax.inject.Named
 
 @Module(subcomponents = [(DataCenterComponent::class)])
 class CoreModule {
+
+    @AppScope
+    @Provides
+    @Named("token")
+    fun provideToken(): Map<String, String>{
+        return mapOf("api_key" to ApiToken)
+    }
 
     @AppScope
     @Provides
@@ -70,8 +78,8 @@ class CoreModule {
 
     @Provides
     @AppScope
-    @Named("imageBaseUrl500")
+    @Named("imageBaseUrl400")
     fun imageBaseUrl500():String{
-        return "${ImageBaseUrl}w500"
+        return "${ImageBaseUrl}w400"
     }
 }

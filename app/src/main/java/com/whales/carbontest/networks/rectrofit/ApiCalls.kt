@@ -11,14 +11,14 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
 
-class ApiCalls @Inject constructor(retrofit: Retrofit) {
+class ApiCalls @Inject constructor(retrofit: Retrofit, private val token: Map<String, String>) {
 
     private var iApi: IApi = retrofit.create(IApi::class.java)
 
-    fun getTrendingMovies(param : Map<String, String>, iResponse: IResponse<MovieDTO>)
+    fun getTrendingMovies(iResponse: IResponse<MovieDTO>)
     {
         try {
-            val call: Call<MovieDTO> = iApi.getTrendingMovies(param)
+            val call: Call<MovieDTO> = iApi.getTrendingMovies(token)
             call.enqueue(object : Callback<MovieDTO> {
                 override fun onResponse(call: Call<MovieDTO>, response: Response<MovieDTO>) {
                     when {
@@ -55,10 +55,10 @@ class ApiCalls @Inject constructor(retrofit: Retrofit) {
         }
     }
 
-    fun getMovieDetails(param : Map<String, String>, iResponse: IResponse<MovieDetailsDTO>)
+    fun getMovieDetails(movieId: String, iResponse: IResponse<MovieDetailsDTO>)
     {
         try {
-            val call: Call<MovieDetailsDTO> = iApi.getMovieDetails(param)
+            val call: Call<MovieDetailsDTO> = iApi.getMovieDetails(movieId, token)
             call.enqueue(object : Callback<MovieDetailsDTO> {
                 override fun onResponse(call: Call<MovieDetailsDTO>, response: Response<MovieDetailsDTO>) {
                     when {
